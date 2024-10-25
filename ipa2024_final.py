@@ -6,23 +6,24 @@
 #######################################################################################
 # 1. Import libraries for API requests, JSON formatting, time, os, (restconf_final or netconf_final), netmiko_final, and ansible_final.
 
-import os
-import json
 import requests
+import json
 import time
+import os
+# from miko import test
+from restconf_final import create, delete, enable, disable, status
 
 #######################################################################################
 # 2. Assign the Webex access token to the variable ACCESS_TOKEN using environment variables.
 
-ACCESS_TOKEN = os.environ["ACCESS_TOKEN"]
-
+#ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
+ACCESS_TOKEN = "Bearer MWQwNzQwMmMtMzAxMi00ZDAzLWE1ZjItZjhmYzE2NThiNGNiYTc0YjA0N2YtNTEx_P0A1_1ad92174-dfe2-4740-b008-57218895946c"
 #######################################################################################
 # 3. Prepare parameters get the latest message for messages API.
 
 # Defines a variable that will hold the roomId
-roomIdToGetMessages = (
-    "Y2lzY29zcGFyazovL3VzL1JPT00vNTFmNTJiMjAtNWQwYi0xMWVmLWE5YTAtNzlkNTQ0ZjRkNGZi"
-)
+roomIdToGetMessages = "Y2lzY29zcGFyazovL3VzL1JPT00vNTFmNTJiMjAtNWQwYi0xMWVmLWE5YTAtNzlkNTQ0ZjRkNGZi"
+
 
 while True:
     # always add 1 second of delay to the loop to not go over a rate limit of API calls
@@ -42,9 +43,9 @@ while True:
     # - Use the GetParameters to get only the latest message.
     # - Store the message in the "r" variable.
     r = requests.get(
-        "<https://webexapis.com/v1/messages",
-        params=getParameters,
-        headers=getHTTPHeader,
+        "https://webexapis.com/v1/messages", # Add
+        params=getParameters, # Add
+        headers=getHTTPHeader, # Add
     )
     # verify if the retuned HTTP status code is 200/OK
     if not r.status_code == 200:
@@ -108,27 +109,27 @@ while True:
         # Read Send a Message with Attachments Local File Attachments
         # https://developer.webex.com/docs/basics for more detail
 
-        if command == "showrun" and responseMessage == 'ok':
-            filename = "<!!!REPLACEME with show run filename and path!!!>"
-            fileobject = <!!!REPLACEME with open file!!!>
-            filetype = "<!!!REPLACEME with Content-type of the file!!!>"
-            postData = {
-                "roomId": <!!!REPLACEME!!!>,
-                "text": "show running config",
-                "files": (<!!!REPLACEME!!!>, <!!!REPLACEME!!!>, <!!!REPLACEME!!!>),
-            }
-            postData = MultipartEncoder(<!!!REPLACEME!!!>)
-            HTTPHeaders = {
-            "Authorization": ACCESS_TOKEN,
-            "Content-Type": <!!!REPLACEME with postData Content-Type!!!>,
-            }
+        # if command == "showrun" and responseMessage == 'ok':
+        #     filename = "<!!!REPLACEME with show run filename and path!!!>"
+        #     fileobject = <!!!REPLACEME with open file!!!>
+        #     filetype = "<!!!REPLACEME with Content-type of the file!!!>"
+        #     postData = {
+        #         "roomId": <!!!REPLACEME!!!>,
+        #         "text": "show running config",
+        #         "files": (<!!!REPLACEME!!!>, <!!!REPLACEME!!!>, <!!!REPLACEME!!!>),
+        #     }
+        #     postData = MultipartEncoder(<!!!REPLACEME!!!>)
+        #     HTTPHeaders = {
+        #     "Authorization": ACCESS_TOKEN,
+        #     "Content-Type": <!!!REPLACEME with postData Content-Type!!!>,
+        #     }
         # other commands only send text, or no attached file.
-        else:
-            postData = {"roomId": <!!!REPLACEME!!!>, "text": <!!!REPLACEME!!!>}
-            postData = json.dumps(postData)
+        # else:
+        postData = {"roomId": roomIdToGetMessages, "text": responseMessage}
+        postData = json.dumps(postData)
 
             # the Webex Teams HTTP headers, including the Authoriztion and Content-Type
-            HTTPHeaders = {"Authorization": <!!!REPLACEME!!!>, "Content-Type": <!!!REPLACEME!!!>}   
+        HTTPHeaders = {"Authorization": ACCESS_TOKEN, "Content-Type": "application/json"}   
 
         # Post the call to the Webex Teams message API.
         r = requests.post(
