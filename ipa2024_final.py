@@ -10,14 +10,16 @@ import requests
 import json
 import time
 import os
+
 # from miko import test
 from restconf_final import create, delete, enable, disable, status
 
 #######################################################################################
 # 2. Assign the Webex access token to the variable ACCESS_TOKEN using environment variables.
 
-#ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
-ACCESS_TOKEN = "Bearer MWQwNzQwMmMtMzAxMi00ZDAzLWE1ZjItZjhmYzE2NThiNGNiYTc0YjA0N2YtNTEx_P0A1_1ad92174-dfe2-4740-b008-57218895946c"
+ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
+print(ACCESS_TOKEN)
+
 #######################################################################################
 # 3. Prepare parameters get the latest message for messages API.
 
